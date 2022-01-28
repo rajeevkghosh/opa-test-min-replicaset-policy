@@ -29,6 +29,6 @@ spec:
           msg := sprintf("you must provide minimum : %v replicas", [required])
         }
          deny[msg] {
-          input.review.object != "Deployment"
+          input.review.object.kind != "Deployment"
           msg := sprintf("Please select only kind: Deployment",[])
         }

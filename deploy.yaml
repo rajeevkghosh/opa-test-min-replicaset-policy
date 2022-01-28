@@ -1,7 +1,6 @@
-
 # nginx-deploy.yaml
 apiVersion: apps/v1
-kind: Pod
+kind: Deployment
 metadata:
   name: nginx-deploy
   labels:

@@ -20,12 +20,23 @@ spec:
       rego: |
         package k8srequiredReplicas
 
-        violation[{"msg": msg, "details": {}}] {
-          provided := input.review.object.spec.replicas
-          provided < 3
-          msg :=  input.parameter.message
+        get_message(parameters, _default) = msg {
+        not parameters.message
+        msg := _default
         }
-         violation[{"msg": msg, "details": {}}] {
-          input.review.object.kind != "Deployment"
-          msg := input.parameter.message
+        get_message(parameters, _default) = msg {
+        msg := parameters.message
+        }
+
+        violation[{"msg": msg, "details": {}}] {
+        provided := input.review.object.spec.replicas
+        provided < 3
+        def_msg := sprintf("Deployment should have min 3 replicaset %v", [])
+        msg := get_message(input.parameters, def_msg)
+        }
+
+        violation[{"msg": msg, "details": {}}] {
+        input.review.object.kind != "Deployment"
+        def_msg := sprintf("Deployment should have min 3 replicaset %v", [])
+        msg := get_message(input.parameters, def_msg)
         }

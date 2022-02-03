@@ -34,9 +34,3 @@ spec:
         def_msg := sprintf("Deployment should have min 3 replicaset %v", [])
         msg := get_message(input.parameters, def_msg)
         }
-
-        violation[{"msg": msg, "details": {}}] {
-        input.review.object.kind != "Deployment"
-        def_msg := sprintf("Deployment should have min 3 replicaset %v", [])
-        msg := get_message(input.parameters, def_msg)
-        }

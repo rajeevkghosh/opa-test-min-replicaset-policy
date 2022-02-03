@@ -13,9 +13,8 @@ spec:
         # Schema for the `parameters` field
         openAPIV3Schema:
           properties:
-            replicaset:
-              type: integer
-
+            message:
+              type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
       rego: |
@@ -23,11 +22,10 @@ spec:
 
         violation[{"msg": msg, "details": {}}] {
           provided := input.review.object.spec.replicas
-          required := input.parameters.replicaset
-          required - provided > 0
-          msg := sprintf("you must provide minimum %v replicas", [required])
+          provided < 3
+          msg :=  input.parameter.message
         }
          violation[{"msg": msg, "details": {}}] {
           input.review.object.kind != "Deployment"
-          msg := sprintf("Please select only kind Deployment",[])
+          msg := input.parameter.message
         }
